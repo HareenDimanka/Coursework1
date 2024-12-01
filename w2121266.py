@@ -10,41 +10,47 @@ def validate_date_input():
     - Correct range for day, month, and year
     """
 
-    while True: #Infinity loop to get the answer until it is true
+    while True: # infinite loop to the entire input validation process until the correct input is entered
         try:
-            day = input("Please enter the day of the servey in the format dd: ") #Get the date input from user
-            if not day.isdigit(): # if input is not a digit prints "Integer required" and continue to the begining
-                print("Integer required")
-                continue
-            day = int(day) #Converts to an integer
-            if day > 31 or day < 1: #Checks the values are within the range and if not continue to the top
-                print("Out of range, 01-31 for day")
-                continue
+            while True: #Infinity loop to get the correct input for the day
             
-            
-            month = input("Please enter the month of the survey in the format MM: ")#Get the date input from user
-            if not month.isdigit(): #if input is not a digit prints "Integer required" and continue to the begining
-                print("Integer required")
-                continue
-            month = int(month)
-            if month > 12 or month < 1:
-                print("Out of range, values must be in the range 1 to 12 ")
-                continue
-            
-            
-            year = input("Please enter the year of the survey in the format YYYY: ")#Get the date input from user
-            if not year.isdigit(): #if input is not a digit prints "Integer required" and continue to the begining
-                print("Integer required")
-                continue
-            year = int(year) #Converts to an integer
-            if year > 2024 or year < 2000: #Checks the values are within the range and if not continue to the top
-                print("Out of range, values must range from 2000 and 2024 ")
-                continue
-            
+                day = input("Please enter the day of the servey in the format dd: ") #Get the date input from user
+                if not day.isdigit(): # if input is not a digit prints "Integer required" and continue to the begining
+                    print("Integer required")
+                    continue
+                day = int(day) #Converts to an integer
+                if day > 31 or day < 1: #Checks the values are within the range and if not continue to input day again
+                    print("Out of range, 01-31 for day") #prints the error message
+                    continue
+                break # exit the loop if the day_input is correct
+
+            while True: # Start an infinite loop again to get the correct correct input for the month
+                    
+                month = input("Please enter the month of the survey in the format MM: ")#Get the date input from user
+                if not month.isdigit(): #if input is not a digit prints "Integer required" and continue to the begining
+                    print("Integer required") #prints the error message
+                    continue
+                month = int(month) #converts string to int
+                if month > 12 or month < 1: #check the value is within the range else continue to the top
+                    print("Out of range, values must be in the range 1 to 12 ")
+                    continue
+                break # exit the loop if the input is correct
+                
+            while True: # Start an infinite loop again to get the correct correct input for the year
+                
+                year = input("Please enter the year of the survey in the format YYYY: ")#Get the date input from user
+                if not year.isdigit(): #if input is not a digit prints "Integer required" and continue to the begining
+                    print("Integer required")
+                    continue
+                year = int(year) #Converts to an integer
+                if year > 2024 or year < 2000: #Checks the values are within the range and if not continue to the top
+                    print("Out of range, values must range from 2000 and 2024 ") 
+                    continue
+                break # exit the loop if the input is correct
             return day, month, year #return the correct input as a tuple
-        
+            
         except Exception as error: #handles any errors apart from the above errors
-            print(f"Error occured {error}")
+            print(f"Error occured {error}") #prints the error message
         
 
 def validate_continue_input():
@@ -59,22 +65,12 @@ def validate_continue_input():
         user_input = input("Do you need another dataset from the survey? (Y/N) : ").strip().upper()
         if user_input == "Y": #Checks the input of the user
             return True
-        elif user_input == "N":
+        elif user_input == "N": #Checks for the user's input
             return False
         else:
-            print("Invalid. Enter 'Y' for yes or 'N' for no ")
+            print("Invalid. Enter 'Y' for yes or 'N' for no ") # prints the error message
             
 
-    
-
-    
-    pass  # Validation logic goes here
-
-def validate_continue_input():
-    """
-    Prompts the user to decide whether to load another dataset:
-    - Validates "Y" or "N" input
-    """
     pass  # Validation logic goes here
 
 
@@ -92,7 +88,7 @@ def process_csv_data(file_path, selected_date):
     - Two-wheeled vehicles, and other requested metrics
     """
 
-    outcomes = {
+    outcomes = { #initialize a dictionary with the following keys and values
         # Initialize variables
         "total_vehicles" : 0,
         "total_trucks" : 0,
@@ -105,69 +101,86 @@ def process_csv_data(file_path, selected_date):
         "total_hanley_highway" : 0,
         "total_scooters_elm_avenue" : 0,
         "hourly_vehicles_hanley_highway" : [0] * 24,
-        "total_rain_hours" : 0
+        "total_rain_hours" : 0,
+        "total_bicycles" : 0 
     }
 
     try:
-        with open(file_path, mode = 'r') as file:
+        with open(file_path, mode = 'r') as file: #opens the csv file and read its content 
             reader = csv.DictReader(file)
-            for row in reader:
+            for row in reader: # iterate through each row of the csv file checking if the date matches the selected date
                 if row['Date'] != selected_date:
                     continue
-                outcomes["total_vehicles"] += 1
-                if row['VehicleType'] == 'Truck':
+                outcomes["total_vehicles"] += 1 # if selected date matches increment the total vehicle count by 1
+                if row['VehicleType'] == 'Truck': # if the vehicle is a truck increment the total truck count by 1
                     outcomes['total_trucks'] += 1
-                if row['elctricHybrid'] == 'True':
+                if row['elctricHybrid'] == 'True': # if the vehicle is electric and add to the count
                     outcomes["total_electric_vehicles"] += 1
-                if row['VehicleType'] in ['Bicycle', 'Motorcycle', 'Scooter']:
+                if row['VehicleType'] in ['Bicycle', 'Motorcycle', 'Scooter']: # check the vehicle if it's a two wheeler and add to the count
                     outcomes["total_two_wheeled"] += 1
+                if row['VehicleType'] == 'Bicycle': # check for the bicycle and increment the count by 1
+                    outcomes["total_bicycles"] += 1
+                
+                #check for the busses heading north at the Elm Avenue/ Rabbit road junction and add to the count
                 if row['JunctionName'] == 'Elm Avenue/Rabbit Road' and row['travel_Direction_out'] == 'N' and row['VehicleType'] == 'Buss':
                     outcomes["total_busses_north"] += 1
+                #check for the vehicles that passes both junctions without turning and increment the count by 1
                 if row['travel_Direction_in'] == row['travel_Direction_out']:
                     outcomes["total_no_turn"] += 1
+                # if speed limit is over the junction speed limit count the number of vehicles
                 if int(row['VehicleSpeed']) > int(row['JunctionSpeedLimit']):
                     outcomes["total_over_speed_limit"] += 1
+                #check for the scooter at the Elm Avenue/ Rabbit road junction and add to the count
                 if row['JunctionName'] == 'Elm Avenue/Rabbit Road':
                     outcomes["total_elm_avenue"] += 1
                     if row['VehicleType'] == 'Scooter':
                         outcomes['total_scooters_elm_avenue'] += 1
+                # check vehicles at Hanley highway/west junction in the peak hour and add to the count
                 if row['JunctionName'] == 'Hanley Highway/Westway':                                          
                     outcomes["total_hanley_highway"] += 1
                     hour = int(row['timeOfDay'].split(':')[0])
                     outcomes["hourly_vehicles_hanley_highway"][hour] += 1
-                if 'Rain' in row['Weather_Conditions']:
+                if 'Rain' in row['Weather_Conditions']: # check for the hours of rain and increment the count by 1
                     outcomes["total_rain_hours"] += 1
 
-    except FileNotFoundError:
-        print(f"File {file_path} not found")
+    except FileNotFoundError: # if a file is not found handles the error file not found
+        print(f"File {file_path} not found") 
         return None
 
     #Calculate the average numbers and percentages
 
+    #calculate the percentage of trucks and round it to the nearest whole number
     outcomes["percentage_trucks"] = round((outcomes['total_trucks'] / outcomes['total_vehicles']) * 100) if outcomes["total_vehicles"] > 0 else 0
-    outcomes["average_bicycles_per_hour"] = round((outcomes['total_two_wheeled']) / 24)
+    # calculate the average number of bicycles per hour and round it to the nearest whole number 
+    outcomes["average_bicycles_per_hour"] = (
+        round(outcomes['total_bicycles'] / 24)
+        if outcomes['total_two_wheeled'] > 0 
+        else 0
+    )
+    # calculate the percentage of scooters at the elm/Avenue junction and round it to the nearest whole number
     outcomes["percentage_scooters_elm_avenue"] = round((outcomes['total_scooters_elm_avenue'] /outcomes['total_elm_avenue']) * 100 ) if outcomes['total_elm_avenue'] > 0 else 0
 
-    #find the peak hour
+    #find the peak hour at hanley hihgway/westway junction
     peak_hour_vehicles = max(outcomes['hourly_vehicles_hanley_highway'])
     outcomes["peak_hours"] = [f"Between {hour:02d} : 00 and {hour+1:02d} : 00" for hour, count in enumerate(outcomes["hourly_vehicles_hanley_highway"]) if count == peak_hour_vehicles]
 
 
-    return outcomes
+    return outcomes # return the outcomes dictionary
 
     pass  # Logic for processing data goes here
 
 
 
 
-def display_outcomes(outcomes):
+def display_outcomes(outcomes): # takes one parameter as outcomes
     """
     Displays the calculated outcomes in a clear and formatted way.
     """
-    if outcomes is None:
+    if outcomes is None: # if no data was found to displat print no data was found to display
         print("No data was found to display")
-        return
+        return # returns nothing
     
+    #print the outcomes in a formatted way 
     print(f"Total number of vehicles : {outcomes['total_vehicles']}")
     print(f"Total number of trucks : {outcomes['total_trucks']}")
     print(f"Total number of electric vehicles : {outcomes['total_electric_vehicles']}")
@@ -194,12 +207,12 @@ def save_results_to_file(outcomes, file_name="results.txt"):
     Saves the processed outcomes to a text file and appends if the program loops.
     """
 
-    if outcomes is None:
+    if outcomes is None: # check if the outcomes is empty and displays the message
         print("No data to display")
-        return
+        return # returns nothing
     
 
-    try:
+    try: # try block to handle any errors that may occur
         # open the file in append mode and write the outputs to the file
         with open(file_name, mode = 'a') as file: 
             file.write("Results of the Survey\n")
@@ -220,11 +233,10 @@ def save_results_to_file(outcomes, file_name="results.txt"):
             file.write(f"Peak traffic hours at Hanley Highway/Westway: {', '.join(outcomes['peak_hours'])}")
             file.write(f"Total number of hours of rain: {outcomes['total_rain_hours']}")
 
-            #Add the peakhour as well (remember)
             file.write("-" * 10 + "\n")
         
-        print(f"Results saved to {file_name}.")
-    except Exception as error:
+        print(f"Results saved to {file_name}.") # prints the message that results have been saved to the file
+    except Exception as error: # handles any errrors that may occur  and prints the error message
         print(f"An error occured while saving the results : {error}")
 
 
