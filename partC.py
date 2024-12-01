@@ -1,15 +1,15 @@
 # Task C: Save Results to Text File
-def save_results_to_file(outcomes, file_name="results.txt"):
+def save_results_to_file(outcomes, file_name="results.txt"): # take two parameters outcomes and file name with a default value of results.txt
     """
     Saves the processed outcomes to a text file and appends if the program loops.
     """
 
-    if outcomes is None:
+    if outcomes is None: # check if the outcomes is empty and displays the message
         print("No data to display")
-        return
+        return # returns nothing
     
 
-    try:
+    try: # try block to handle any errors that may occur
         # open the file in append mode and write the outputs to the file
         with open(file_name, mode = 'a') as file: 
             file.write("Results of the Survey\n")
@@ -30,11 +30,10 @@ def save_results_to_file(outcomes, file_name="results.txt"):
             file.write(f"Peak traffic hours at Hanley Highway/Westway: {', '.join(outcomes['peak_hours'])}")
             file.write(f"Total number of hours of rain: {outcomes['total_rain_hours']}")
 
-            #Add the peakhour as well (remember)
             file.write("-" * 10 + "\n")
         
-        print(f"Results saved to {file_name}.")
-    except Exception as error:
+        print(f"Results saved to {file_name}.") # prints the message that results have been saved to the file
+    except Exception as error: # handles any errrors that may occur  and prints the error message
         print(f"An error occured while saving the results : {error}")
 
     pass  # File writing logic goes here

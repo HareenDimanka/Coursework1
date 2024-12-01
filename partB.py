@@ -95,14 +95,15 @@ def process_csv_data(file_path, selected_date): # takes two parameters as file t
 
 
 
-def display_outcomes(outcomes):
+def display_outcomes(outcomes): # takes one parameter as outcomes
     """
     Displays the calculated outcomes in a clear and formatted way.
     """
-    if outcomes is None:
+    if outcomes is None: # if no data was found to displat print no data was found to display
         print("No data was found to display")
-        return
+        return # returns nothing
     
+    #print the outcomes in a formatted way 
     print(f"Total number of vehicles : {outcomes['total_vehicles']}")
     print(f"Total number of trucks : {outcomes['total_trucks']}")
     print(f"Total number of electric vehicles : {outcomes['total_electric_vehicles']}")

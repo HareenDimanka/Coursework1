@@ -140,7 +140,7 @@ def process_csv_data(file_path, selected_date):
                     outcomes["total_hanley_highway"] += 1
                     hour = int(row['timeOfDay'].split(':')[0])
                     outcomes["hourly_vehicles_hanley_highway"][hour] += 1
-                if 'Rain' in row['Weather_Conditions']: # check for the hours of rain and increment the count by 1
+                if 'Rain' in row['Weather_Conditions'].lower(): # check for the hours of rain and increment the count by 1
                     outcomes["total_rain_hours"] += 1
 
     except FileNotFoundError: # if a file is not found handles the error file not found
